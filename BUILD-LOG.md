@@ -92,10 +92,10 @@ Output: `zig-out\bin\ghostty.exe` + `zig-out\bin\ghostty-vt.dll`
 - ✅ Clipboard
 
 ## Known Missing Features
-- ❌ Scrollbar
+- ⚠️ Scrollbar — implemented (Win32 overlay, drag/click-to-jump/hover), needs visual polish
+- ⚠️ Application icon — implemented this session
 - ❌ IME cursor positioning
 - ❌ IPC server (named pipe)
-- ❌ Application icon
 - ❌ Taskbar flash on completion
 - ❌ Inspector overlay
 - ❌ Secure keyboard input mode

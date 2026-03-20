@@ -115,7 +115,7 @@ Legend: ✅ Works | ❌ Broken | ⚠️ Partial | 🔲 Not tested | 🚧 Known m
 |---------|--------|-------|
 | Title bar renders | 🔲 | |
 | Window title updates with shell | 🔲 | |
-| App icon in taskbar | 🚧 | Not implemented |
+| App icon in taskbar | ✅ | Implemented this session |
 | Command palette (Ctrl+Shift+P) | 🔲 | Implemented in fork |
 | Search bar | 🔲 | Implemented in fork |
 | Inspector (Ctrl+Shift+I) | ⚠️ | Shows notification, no UI yet |
@@ -140,7 +140,6 @@ Legend: ✅ Works | ❌ Broken | ⚠️ Partial | 🔲 Not tested | 🚧 Known m
 - Scrollbar implemented as Win32 overlay HWND — functional (drag, click-to-jump, hover states) but needs visual polish
 - IME cursor positioning wrong (candidate window bottom-left instead of at cursor)
 - IPC server (named pipe) missing — `ghostty @` commands won't work
-- Application icon missing from taskbar/window
 - Taskbar flash on completion missing
 - Full inspector UI not implemented (shows Win32 notification instead)
 - Secure keyboard input mode not implemented
