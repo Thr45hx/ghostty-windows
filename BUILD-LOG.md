@@ -10,6 +10,20 @@ If it works: bragging rights. Virtually nobody has done this.
 
 ---
 
+## Origin Story
+
+Asked Claude to build Ghostty natively on Windows. Claude argued it wasn't designed for Windows, the ecosystem wasn't ready, strongly recommended against it. User said: so what, let's try anyway.
+
+Back and forth. Claude eventually started the build — then ran out of credits mid-session.
+
+GitHub Copilot picked it up. No debate, no disclaimers. `/yolo` — just started throwing things at it until something stuck.
+
+Claude came back later to clean up the wreckage and figure out why things worked or didn't.
+
+That's the whole methodology.
+
+---
+
 ## Source Fork
 **Repo:** https://github.com/adilahmeddev/ghostty-windows
 **Branch:** `windows-apprt`
