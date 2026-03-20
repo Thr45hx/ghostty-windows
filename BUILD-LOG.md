@@ -286,6 +286,13 @@ zig build -Dapp-runtime=win32 -Dwinui=false -Doptimize=ReleaseFast -Dtarget=x86_
 - This implementation intentionally avoids renderer-backend changes and uses a GDI overlay for lower-risk Windows integration.
 - All existing builds, logs, generated artifacts, and workaround files were preserved.
 
+**Post-validation issue:**
+- Animation appeared glitchy during testing — flashing in and out, not smooth
+- Claude attempted fixes, none resolved it during the session
+- Root cause: stale GPU/driver state from the active session
+- **Resolution:** Windows restart — animation runs perfectly on a clean boot
+- Lesson: GPU overlay timing issues on Windows can be session-state artifacts, not code bugs
+
 ### Attempt 6 — 2026-03-14
 **Status:** SUCCESS — Win32 inspector action gap partially fixed
 
