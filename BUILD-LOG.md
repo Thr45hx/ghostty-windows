@@ -345,3 +345,158 @@ zig build -Dapp-runtime=win32 -Dwinui=false -Doptimize=ReleaseFast -Dtarget=x86_
 - `C:\Users\Thr45h\.copilot\session-state\a21c05c6-d40c-48a5-905d-483e9682527b\files\spawnfix-pwsh-noprofile-stderr.log`
 - `C:\Users\Thr45h\.copilot\session-state\a21c05c6-d40c-48a5-905d-483e9682527b\files\spawnfix-cmd-exit-stderr.log`
 
+### Attempt 8 — 2026-03-14
+**Status:** SUCCESS — Shell preference order fixed + unsafe paste confirmation added
+
+**Problems observed (from logs):**
+- Initial launch: no shell found at all → fell back to `cmd.exe`
+  - `warning(config): no default shell found, will default to using cmd`
+- After shell config added: `error.Unexpected` in io_thread when using direct shell path
+  - `warning(io_thread): error in io thread err=error.Unexpected`
+- Clipboard paste rejected silently with no user feedback:
+  - `info(surface): potentially unsafe paste detected, rejecting until confirmation`
+  - `warning(win32_surface): Failed to complete clipboard request: error.UnsafePaste`
+
+**Repo changes applied:**
+- Updated shell fallback order in Win32 default shell detection:
+  - now prefers `pwsh.exe` → `powershell.exe` → `cmd.exe` (instead of failing)
+- Added native Win32 confirmation dialog for unsafe paste (instead of silent rejection)
+
+**Validation:**
+- `ghostty-fallback-test-stderr.log` confirms: `info(config): default shell source=path value=C:\Program Files\PowerShell\7\pwsh.exe`
+- Shell now launches correctly without io_thread error
+
+**Artifacts:**
+- `C:\Users\Thr45h\.copilot\session-state\a21c05c6-d40c-48a5-905d-483e9682527b\files\ghostty-shellfix-test-stderr.log`
+- `C:\Users\Thr45h\.copilot\session-state\a21c05c6-d40c-48a5-905d-483e9682527b\files\ghostty-fallback-test-stderr.log`
+
+---
+
+### Attempt 9 — 2026-03-14
+**Status:** SUCCESS — Visual polish pass + working config
+
+**Problem observed:**
+- Config file existed at `C:\Users\Thr45h\AppData\Local\ghostty/config.ghostty` but was empty
+  - `warning: error reading optional config file, not loading err=error.FileIsEmpty`
+- No theme, default font, no opacity, default cursor — bare bones appearance
+
+**Config established at `C:\Users\Thr45h\AppData\Local\ghostty/config.ghostty`:**
+```
+working-directory = home
+window-startup-animation = true
+shell-integration = none
+theme = "Catppuccin Mocha"
+font-family = "CaskaydiaCoveNerdFontMono-Regular"
+font-family-bold = "CaskaydiaCoveNerdFontMono-Bold"
+font-family-italic = "CaskaydiaCoveNerdFontMono-Italic"
+font-family-bold-italic = "CaskaydiaCoveNerdFontMono-BoldItalic"
+font-size = 16
+background-opacity = 0.92
+cursor-style = block
+cursor-style-blink = false
+cursor-color = #f97316
+window-new-tab-position = end
+```
+
+**Native tab keybinds added to config:**
+- New tab, close tab, switch tabs, jump to tab by number
+
+**Validation:**
+- `ghostty-vibe-startup-stderr.log` — debug build run confirming config loads, theme applies
+- `ghostty-final-baseline-stderr.log` — release build with full config loaded, pwsh.exe detected
+
+**Known issue discovered:**
+- Explicit bold/italic font face names not resolved by DirectWrite:
+  - `warning(font_shared_grid_set): font-family bold not found: CaskaydiaCoveNerdFontMono-Regular`
+- DirectWrite falls back to synthetic bold/italic automatically — visually acceptable
+
+**Artifacts:**
+- `C:\Users\Thr45h\.copilot\session-state\a21c05c6-d40c-48a5-905d-483e9682527b\files\ghostty-vibe-startup-stderr.log`
+- `C:\Users\Thr45h\.copilot\session-state\a21c05c6-d40c-48a5-905d-483e9682527b\files\ghostty-final-baseline-stderr.log`
+- `C:\Users\Thr45h\.copilot\session-state\a21c05c6-d40c-48a5-905d-483e9682527b\files\ghostty-fontfaces-test-stderr.log`
+
+---
+
+### Attempt 10 — 2026-03-14/15
+**Status:** SUCCESS — Scrollbar implemented
+
+**Problem:** No scrollbar at all in Win32 build. Core scrollback buffer exists but no visual indicator.
+
+**Approach:** Custom Win32 HWND overlay — separate child window positioned over the terminal surface.
+
+**Implementation:**
+- New file: `src\apprt\win32\Scrollbar.zig` (~400 lines)
+  - Custom Win32 HWND overlay rendered via GDI
+  - Drag to scroll
+  - Click-to-jump (click anywhere on track)
+  - Auto-show on scroll, auto-hide after idle timeout
+  - Hover state highlight
+- Integrated into `src\apprt\win32\Surface.zig` — scrollbar synced to terminal viewport
+
+**Validation:**
+- Scrollbar visible and functional on rebuilt binary
+- Drag, click-to-jump, and hover all confirmed working
+- Noted: visual polish still needed (sizing, colors, feel)
+
+---
+
+### Attempt 11 — 2026-03-15
+**Status:** SUCCESS — Application icon implemented
+
+**Problem:** No app icon in taskbar or window title bar. `ghostty.exe` showed generic Windows icon.
+
+**Implementation:**
+- Generated `ghostty.ico` (86KB, multi-resolution) from official Ghostty ghost SVG asset
+- Embedded via Win32 resource: `SetClassLong(hwnd, GCL_HICON, LoadIcon(hinst, MAKEINTRESOURCE(IDI_GHOSTTY)))`
+- Icon appears in: taskbar button, window title bar, Alt+Tab switcher
+
+**Artifacts:**
+- `D:\devbuilds\ghostty-windows\src\zig-out\bin\ghostty.ico` — 86,258 bytes
+
+---
+
+### Attempt 12 — 2026-03-15
+**Status:** SUCCESS — Release build packaged with Inno Setup installer
+
+**Note on dev vs release:**
+The "release" build is the same binary as the dev build (`ReleaseFast` optimize flag used throughout).
+The distinction is packaging only — Inno Setup strips the PDB debug symbols for the installed version.
+
+**Binary sizes (Mar 15 17:24-17:25):**
+- `ghostty.exe` — 28,718,592 bytes (identical across dev and installed)
+- `ghostty-vt.dll` — 713,216 bytes (identical)
+- `ghostty.pdb` — 93,700,096 bytes (dev only — stripped by installer)
+- `ghostty-vt.pdb` — 3,448,832 bytes (dev only — stripped by installer)
+
+**Build version:** `1.3.0-windows-apprt+0e5ca30`
+**Fork version tag:** `1.3.0-dev` (upstream at time of build: `1.3.2-dev`)
+
+**Installer:** `installer/ghostty.iss` (Inno Setup) — produces standard Windows installer
+**Install location:** `C:\Program Files\Ghostty\bin\`
+
+---
+
+## Runtime Log — Confirmed Persistent Warnings
+
+These appear in every launch log and are expected / known-unfixed:
+
+| Warning | Cause | Status |
+|---------|-------|--------|
+| `warning(os_locale): setlocale failed` | Windows locale handling differs from POSIX | Harmless, en_US.UTF-8 fallback works |
+| `warning(win32): Failed to set DPI awareness` | DPI awareness set too late in init sequence | Harmless, DPI scaling still works |
+| `warning(stream): unimplemented mode: 9001` | Unknown VT mode — likely Win32-specific or PS7 | Unresolved, no visible impact observed |
+| `conpty.dll not found, using system ConPTY` | Custom conpty.dll not shipped — uses Windows built-in | Expected behavior |
+
+---
+
+## Debug Build
+
+A debug build was produced during inspector testing (Attempt 9):
+```powershell
+zig build -Dapp-runtime=win32 -Dwinui=false -Dtarget=x86_64-windows
+# (no -Doptimize flag = Debug by default)
+```
+Debug binary warns: `"This is a debug build. Performance will be very poor."`
+Used for: inspector action tracing, io_thread error diagnosis, input event logging.
+Not suitable for daily use — ReleaseFast is the standard build.
+
