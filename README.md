@@ -46,7 +46,9 @@ See [BUILD-LOG.md](BUILD-LOG.md) for the full build process including every issu
 
 ## Notes
 
-This was built with AI assistance (Claude) as a learning exercise. Not a coder — just stubborn enough to bruteforce it. All findings documented in the build log.
+This was built with AI assistance as a learning exercise. Not a coder — just stubborn enough to bruteforce it. All findings documented in the build log.
+
+AI breakdown: GitHub Copilot handled the surgical brute-force (throw everything at it until something sticks), Claude cleaned up the wreckage and figured out why. Turns out that's a pretty effective team.
 
 Upstream fork: https://github.com/adilahmeddev/ghostty-windows
 Ghostty: https://ghostty.org
