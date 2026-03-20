@@ -16,7 +16,7 @@ Legend: ✅ Works | ❌ Broken | ⚠️ Partial | 🔲 Not tested | 🚧 Known m
 | Cursor visible and blinking | 🔲 | |
 | Correct colors (256 / truecolor) | 🔲 | |
 | Scrollback buffer | 🔲 | |
-| Scrollbar | 🚧 | Not implemented yet |
+| Scrollbar | ⚠️ | Implemented (Win32 overlay, functional — needs polish) |
 | Mouse scroll | 🔲 | |
 | Mouse click to position cursor | 🔲 | |
 | Copy (Ctrl+Shift+C) | 🔲 | |
@@ -137,7 +137,7 @@ Legend: ✅ Works | ❌ Broken | ⚠️ Partial | 🔲 Not tested | 🚧 Known m
 ---
 
 ## Known Issues (pre-testing)
-- Scrollbar not implemented
+- Scrollbar implemented as Win32 overlay HWND — functional (drag, click-to-jump, hover states) but needs visual polish
 - IME cursor positioning wrong (candidate window bottom-left instead of at cursor)
 - IPC server (named pipe) missing — `ghostty @` commands won't work
 - Application icon missing from taskbar/window
