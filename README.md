@@ -10,6 +10,20 @@ Built on top of [@adilahmeddev's windows-apprt fork](https://github.com/adilahme
 
 ---
 
+## Screenshots
+
+Startup ghost animation running natively on Win32:
+
+![Animation frame 1](screenshots/animation-frame1.png)
+![Animation frame 2](screenshots/animation-frame2.png)
+![Animation frame 3](screenshots/animation-frame3.png)
+
+Inno Setup installer (Ghostty 1.3.0-dev):
+
+![Installer](screenshots/installer.png)
+
+---
+
 ## What Works
 
 - GPU-accelerated rendering (D3D11 primary, OpenGL fallback)
