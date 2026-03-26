@@ -3,7 +3,7 @@
 #define MyAppPublisher "Ghostty Contributors"
 #define MyAppURL "https://ghostty.org"
 #define MyAppExeName "ghostty.exe"
-#define SrcDir "..\src\zig-out"
+#define SrcDir ".."
 
 [Setup]
 AppId={{A7B3C2D4-E5F6-4789-ABCD-EF0123456789}
