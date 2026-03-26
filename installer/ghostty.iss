@@ -3,7 +3,7 @@
 #define MyAppPublisher "Ghostty Contributors"
 #define MyAppURL "https://ghostty.org"
 #define MyAppExeName "ghostty.exe"
-#define SrcDir ".."
+#define SrcDir "..\src\zig-out"
 
 [Setup]
 AppId={{A7B3C2D4-E5F6-4789-ABCD-EF0123456789}
@@ -16,10 +16,10 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\Ghostty
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=LICENSE.txt
-OutputDir=output
+LicenseFile={#SourcePath}LICENSE.txt
+OutputDir={#SourcePath}output
 OutputBaseFilename=ghostty-windows-{#MyAppVersion}-x64-setup
-SetupIconFile={#SrcDir}\bin\ghostty.ico
+SetupIconFile={#SourcePath}ghostty.ico
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
