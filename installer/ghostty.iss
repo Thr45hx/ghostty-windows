@@ -1,3 +1,10 @@
+; ============================================================
+; PREREQUISITE: Build Ghostty before running this script.
+;   cd ..\src
+;   zig build -Doptimize=ReleaseFast
+; This populates src\zig-out\bin\ with ghostty.exe and ghostty-vt.dll.
+; ============================================================
+
 #define MyAppName "Ghostty"
 #define MyAppVersion "1.3.0-dev"
 #define MyAppPublisher "Ghostty Contributors"
