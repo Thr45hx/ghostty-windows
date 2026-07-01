@@ -161,16 +161,39 @@ end;
 // Install / uninstall hooks
 // ---------------------------------------------------------------
 
+procedure AddToPath(Dir: string);
+var
+  OrigPath, NewPath: string;
+begin
+  // Read the REAL current system PATH (raw value, preserves %VARS%).
+  // If the value is missing for any reason, treat it as empty rather than
+  // clobbering it. NEVER overwrite PATH with anything but (existing + Dir).
+  if not RegQueryStringValue(
+    HKEY_LOCAL_MACHINE,
+    'SYSTEM\CurrentControlSet\Control\Session Manager\Environment',
+    'Path', OrigPath)
+  then
+    OrigPath := '';
+
+  if OrigPath = '' then
+    NewPath := Dir
+  else if Copy(OrigPath, Length(OrigPath), 1) = ';' then
+    NewPath := OrigPath + Dir
+  else
+    NewPath := OrigPath + ';' + Dir;
+
+  RegWriteExpandStringValue(
+    HKEY_LOCAL_MACHINE,
+    'SYSTEM\CurrentControlSet\Control\Session Manager\Environment',
+    'Path', NewPath);
+end;
+
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
   if CurStep = ssPostInstall then begin
     if WizardIsTaskSelected('addtopath') then
       if NeedsAddPath(ExpandConstant('{app}\bin')) then
-        RegWriteExpandStringValue(
-          HKEY_LOCAL_MACHINE,
-          'SYSTEM\CurrentControlSet\Control\Session Manager\Environment',
-          'Path',
-          ExpandConstant('{app}\bin') + ';{olddata}');
+        AddToPath(ExpandConstant('{app}\bin'));
     if WizardIsTaskSelected('windowsterminal') then
       CreateWindowsTerminalFragment();
   end;

@@ -4,6 +4,14 @@ Native Windows x64 build of [Ghostty](https://ghostty.org) — no WSL2, no emula
 
 Built on top of [@adilahmeddev's windows-apprt fork](https://github.com/adilahmeddev/ghostty-windows), which is the most complete Windows port in existence (34,337 lines of Windows-specific code).
 
+> ## ⚠️ Disclaimer — please read
+>
+> **This is the first program I have ever built.** Zero coding experience, about two weeks into learning to use AI when I made it. It's a passion project / proof-of-concept — "vibe-built" with AI tools (Claude + GitHub Copilot) on top of [@adilahmeddev's fork](https://github.com/adilahmeddev/ghostty-windows), because I wanted a GPU-accelerated terminal on Windows without WSL and wanted to see how far I could push it.
+>
+> I shared it directly with Ghostty's creator ([@mitchellh](https://github.com/mitchellh)), who appreciated the disclosure. This repo is **not affiliated with or endorsed by** the official Ghostty project.
+>
+> **It may or may not be maintained.** Anyone is free to build from it, fork it, or take whatever pieces are useful. Issues and PRs are welcome, but I can't promise a response time — this is a PoC that happens to work, not a supported product. If you're comfortable with that, enjoy. If not, that's completely fair.
+
 **System:** Ryzen 7800X3D / RTX 4060 8GB / Windows 11 Pro x64
 **Build date:** March 2026
 **Status:** Stable for daily use
